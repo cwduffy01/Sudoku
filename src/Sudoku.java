@@ -1,6 +1,7 @@
 public class Sudoku {
     
     private Cell[][] grid;
+    private int wSplit, hSplit;
 
     public Sudoku() {   // calls second constructor
         this(9);
@@ -17,6 +18,13 @@ public class Sudoku {
                 this.grid[i][j] = new Cell(grid[i][j]);
             }
         }
+
+        // finds closest two factors, determine width and height of sections
+        hSplit = (int) Math.sqrt(grid.length);
+        while (grid.length % hSplit != 0) {     // get first factor
+            hSplit--;
+        }
+        wSplit = grid.length / hSplit;          // get second factor
     }
 
     /**
@@ -30,6 +38,22 @@ public class Sudoku {
         grid[r][c].setNum(num);;
     }
 
+    public int[] getRow(int r) {
+        int[] row = new int[grid.length];
+        for (int i = 0; i < row.length; i++) {
+            row[i] = grid[r][i].getNum();
+        }
+        return row;
+    }
+
+    public int[] getCol(int c) {
+        int[] col = new int[grid.length];
+        for (int i = 0; i < col.length; i++) {
+            col[i] = grid[i][c].getNum();
+        }
+        return col;
+    }
+
     public Cell[][] getGrid() {
         return grid;
     }
@@ -38,13 +62,6 @@ public class Sudoku {
     public String toString() {
 
         String rtn = "";
-
-        // finds closest two factors, determine width and height of sections
-        int hSplit = (int) Math.sqrt(grid.length);
-        while (grid.length % hSplit != 0) {     // get first factor
-            hSplit--;
-        }
-        int wSplit = grid.length / hSplit;      // get second factor
 
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
