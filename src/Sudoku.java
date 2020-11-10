@@ -40,6 +40,10 @@ public class Sudoku {
         grid[r][c].setNum(num);;
     }
 
+    public int getSize() {
+        return size;
+    }
+
     public int[] getRow(int r) {
         int[] row = new int[size];
         for (int i = 0; i < row.length; i++) {
