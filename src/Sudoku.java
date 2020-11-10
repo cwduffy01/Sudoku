@@ -1,7 +1,7 @@
 public class Sudoku {
     
     private Cell[][] grid;
-    private int wSplit, hSplit;
+    private int size, wSplit, hSplit;
 
     public Sudoku() {   // calls second constructor
         this(9);
@@ -12,19 +12,21 @@ public class Sudoku {
     }
 
     public Sudoku(int[][] grid) {   // creates multi-dimensional array of cells
-        this.grid = new Cell[grid.length][grid[0].length];
-        for (int i = 0; i < grid.length; i++) {
+        size = grid.length;
+        
+        this.grid = new Cell[size][size];
+        for (int i = 0; i < size; i++) {
             for (int j = 0; j < grid[i].length; j++) {
                 this.grid[i][j] = new Cell(grid[i][j]);
             }
         }
 
         // finds closest two factors, determine width and height of sections
-        hSplit = (int) Math.sqrt(grid.length);
-        while (grid.length % hSplit != 0) {     // get first factor
+        hSplit = (int) Math.sqrt(size);
+        while (size % hSplit != 0) {     // get first factor
             hSplit--;
         }
-        wSplit = grid.length / hSplit;          // get second factor
+        wSplit = size / hSplit;          // get second factor
     }
 
     /**
@@ -39,7 +41,7 @@ public class Sudoku {
     }
 
     public int[] getRow(int r) {
-        int[] row = new int[grid.length];
+        int[] row = new int[size];
         for (int i = 0; i < row.length; i++) {
             row[i] = grid[r][i].getNum();   // add all row cell numbers to array
         }
@@ -47,7 +49,7 @@ public class Sudoku {
     }
 
     public int[] getCol(int c) {
-        int[] col = new int[grid.length];
+        int[] col = new int[size];
         for (int i = 0; i < col.length; i++) {
             col[i] = grid[i][c].getNum();   // add all column cell numbers to array
         }
@@ -66,7 +68,7 @@ public class Sudoku {
      * @return
      */
     public int[] getSect(int s) {
-        int[] sect = new int[grid.length];
+        int[] sect = new int[size];
         int r = (s / hSplit) * hSplit;
         int c = (s % hSplit) * wSplit;
         int count = 0;
@@ -87,7 +89,7 @@ public class Sudoku {
 
         String rtn = "";
 
-        for (int i = 0; i < grid.length; i++) {
+        for (int i = 0; i < size; i++) {
             for (int j = 0; j < grid[i].length; j++) {
                 rtn += grid[i][j];
                 if ((j + 1) % wSplit == 0) {    // split columns
