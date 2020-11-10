@@ -41,7 +41,7 @@ public class Sudoku {
     public int[] getRow(int r) {
         int[] row = new int[grid.length];
         for (int i = 0; i < row.length; i++) {
-            row[i] = grid[r][i].getNum();
+            row[i] = grid[r][i].getNum();   // add all row cell numbers to array
         }
         return row;
     }
@@ -49,9 +49,33 @@ public class Sudoku {
     public int[] getCol(int c) {
         int[] col = new int[grid.length];
         for (int i = 0; i < col.length; i++) {
-            col[i] = grid[i][c].getNum();
+            col[i] = grid[i][c].getNum();   // add all column cell numbers to array
         }
         return col;
+    }
+
+    /**
+     * Returns an arraylist of the numbers in any cell given by 
+     * its index. Cells for a standard sudoku are indexed as:
+     * 
+     * [1] [2] [3]
+     * [4] [5] [6]
+     * [7] [8] [9]
+     * 
+     * @param s
+     * @return
+     */
+    public int[] getSect(int s) {
+        int[] sect = new int[grid.length];
+        int r = (s / hSplit) * hSplit;
+        int c = (s % hSplit) * wSplit;
+        int count = 0;
+        for (int i = r; i < r + hSplit; i++) {
+            for (int j = c; j < c + wSplit; j++) {
+                sect[count++] = grid[i][j].getNum();
+            }
+        }
+        return sect;
     }
 
     public Cell[][] getGrid() {
