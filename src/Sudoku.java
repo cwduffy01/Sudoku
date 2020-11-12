@@ -88,20 +88,17 @@ public class Sudoku {
     }
 
     /**
-     * Returns an arraylist of the numbers in any cell given by 
-     * its index. Cells for a standard sudoku are indexed as:
+     * Returns an arraylist of the numbers in any section given by 
+     * its row and column index
      * 
-     * [1] [2] [3]
-     * [4] [5] [6]
-     * [7] [8] [9]
-     * 
-     * @param s
-     * @return
+     * @param r     row of cell
+     * @param c     column of cell
+     * @return      integer array of numbers in section
      */
-    public int[] getSect(int s) {
+    public int[] getSect(int r, int c) {
         int[] sect = new int[size];
-        int r = (s / hSplit) * hSplit;
-        int c = (s % hSplit) * wSplit;
+        r = r / hSplit * hSplit;
+        c = c / wSplit * wSplit;
         int count = 0;
         for (int i = r; i < r + hSplit; i++) {
             for (int j = c; j < c + wSplit; j++) {
