@@ -6,13 +6,17 @@ public class Solver {
         this.sudoku = sudoku;
     }
 
-    public void scan(int i, int j){
-        int[] row = sudoku.getRow(i);
-        int[] col = sudoku.getCol(j);
-        Cell cell = sudoku.getCell(i, j);
-        for (int k = 0; k < row.length; k++) {
-            cell.removeAnswer(row[k]);
-            cell.removeAnswer(col[k]);
+    public void singleCandidate(int r, int c){
+        Cell cell = sudoku.getCell(r, c);
+
+        int[] row = sudoku.getRow(r);
+        int[] col = sudoku.getCol(c);
+        int[] sect = sudoku.getSect(r, c);
+
+        for (int i = 0; i < row.length; i++) {
+            cell.removeAnswer(row[i]);
+            cell.removeAnswer(col[i]);
+            cell.removeAnswer(sect[i]);
         }
         sudoku.update();
     }
