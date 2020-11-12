@@ -25,6 +25,10 @@ public class Cell {
         return answers;
     }
 
+    public void setAnswers(int answers) {
+        this.answers = answers;
+    }
+
     public void removeAnswer(int num) {
         int a = (answers >> num) << num;
         int b = answers & (int)(Math.pow(2, num-1) - 1);

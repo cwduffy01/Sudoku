@@ -60,7 +60,8 @@ public class Sudoku {
      * @param num   number to change cell to 
      */
     public void setCell(int r, int c, int num) {
-        grid[r][c].setNum(num);;
+        grid[r][c].setNum(num);
+        grid[r][c].setAnswers(0);
     }
 
     public Cell getCell(int i, int j){
@@ -110,6 +111,14 @@ public class Sudoku {
 
     public Cell[][] getGrid() {
         return grid;
+    }
+
+    public int gethSplit() {
+        return hSplit;
+    }
+
+    public int getwSplit() {
+        return wSplit;
     }
 
     @Override
