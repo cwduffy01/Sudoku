@@ -17,7 +17,7 @@ public class Sudoku {
         this.grid = new Cell[size][size];
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < grid[i].length; j++) {
-                this.grid[i][j] = new Cell(grid[i][j]);
+                this.grid[i][j] = new Cell(grid[i][j], size);
             }
         }
 
@@ -29,6 +29,29 @@ public class Sudoku {
         wSplit = size / hSplit;          // get second factor
     }
 
+    public void update() {
+        for(Cell[] arrCells: grid) {
+            for(Cell cell: arrCells) {
+                if (Integer.bitCount(cell.getAnswers()) == 1) {
+                    int num = (int)(Math.log(cell.getAnswers()) / Math.log(2)) + 1;
+                    cell.setAnswers(0);
+                    cell.setNum(num);
+                }
+            }
+        }
+    }
+
+    public boolean isSolved() {
+        for(Cell[] arrCells: grid) {
+            for(Cell cell: arrCells) {
+                if (cell.getNum() == 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     /**
      * Fills a specific (target) cell with a specified number
      * 
@@ -37,7 +60,12 @@ public class Sudoku {
      * @param num   number to change cell to 
      */
     public void setCell(int r, int c, int num) {
-        grid[r][c].setNum(num);;
+        grid[r][c].setNum(num);
+        grid[r][c].setAnswers(0);
+    }
+
+    public Cell getCell(int i, int j){
+        return grid[i][j];
     }
 
     public int getSize() {
@@ -61,20 +89,17 @@ public class Sudoku {
     }
 
     /**
-     * Returns an arraylist of the numbers in any cell given by 
-     * its index. Cells for a standard sudoku are indexed as:
+     * Returns an arraylist of the numbers in any section given by 
+     * its row and column index
      * 
-     * [1] [2] [3]
-     * [4] [5] [6]
-     * [7] [8] [9]
-     * 
-     * @param s
-     * @return
+     * @param r     row of cell
+     * @param c     column of cell
+     * @return      integer array of numbers in section
      */
-    public int[] getSect(int s) {
+    public int[] getSect(int r, int c) {
         int[] sect = new int[size];
-        int r = (s / hSplit) * hSplit;
-        int c = (s % hSplit) * wSplit;
+        r = r / hSplit * hSplit;
+        c = c / wSplit * wSplit;
         int count = 0;
         for (int i = r; i < r + hSplit; i++) {
             for (int j = c; j < c + wSplit; j++) {
@@ -86,6 +111,14 @@ public class Sudoku {
 
     public Cell[][] getGrid() {
         return grid;
+    }
+
+    public int gethSplit() {
+        return hSplit;
+    }
+
+    public int getwSplit() {
+        return wSplit;
     }
 
     @Override
