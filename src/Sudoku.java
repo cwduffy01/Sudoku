@@ -72,15 +72,19 @@ public class Sudoku {
         return true;
     }
 
+    public Section getSection(int row, int column) {
+        return sections[row/sectHeight][column/sectWidth];
+    }
+
     public Cell[][] getGrid() {
         return grid;
     }
 
-    public int gethSplit() {
+    public int getSectHeight() {
         return sectHeight;
     }
 
-    public int getwSplit() {
+    public int getSectWidth() {
         return sectWidth;
     }
 

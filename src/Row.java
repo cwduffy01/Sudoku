@@ -1,5 +1,5 @@
 public class Row {
-    private Cell[] row;
+    private Cell[] cells;
 
     /**
      * Represents a row of a sudoku
@@ -7,20 +7,20 @@ public class Row {
      * @param cells cells in the row
      */
     public Row(Cell[] cells) {
-        row = new Cell[cells.length];
+        this.cells = new Cell[cells.length];
         for (int i = 0; i < cells.length; i++) {
-            row[i] = cells[i];
+            this.cells[i] = cells[i];
         }
     }
 
-    public Cell[] getRow() {
-        return row;
+    public Cell[] getCells() {
+        return cells;
     }
 
     public int[] getNums() {
-        int[] temp = new int[row.length];
+        int[] temp = new int[cells.length];
         for (int i = 0; i < temp.length; i++) {
-            temp[i] = row[i].getNum();
+            temp[i] = cells[i].getNum();
         }
         return temp;    // integer representation of each cell
     }

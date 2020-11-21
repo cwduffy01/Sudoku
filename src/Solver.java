@@ -31,8 +31,7 @@ public class Solver {
     public boolean singleCandidate(Cell cell){
         int[] row = sudoku.getRows()[cell.getRow()].getNums();          // row at cell index
         int[] col = sudoku.getColumns()[cell.getColumn()].getNums();    // column at cell index
-        int[] sect = sudoku.getSections()[cell.getRow()/sudoku.gethSplit()]
-                                         [cell.getColumn()/sudoku.getwSplit()].getNums();   // section at cell index
+        int[] sect = sudoku.getSection(cell.getRow(), cell.getColumn()).getNums();  // section at cell index
 
         for (int i = 0; i < row.length; i++) {  // removes all numbers from cell possibilities
             cell.removeAnswer(row[i]);
@@ -62,10 +61,10 @@ public class Solver {
      * @param section   section to scan
      * @return  true if cell was filled, false otherwise
      */
-    public boolean scan(Section section) {
+    public boolean scanSection(Section section) {
         int singles = 0;    // binary number for single occurances
         int nullify = 0;    // binary number for duplicates, one if duplicate, zero if not
-        for (Cell[] cells: section.getSection()) {
+        for (Cell[] cells: section.getCells()) {
             for(Cell cell: cells) {
                 nullify |= (singles & cell.getAnswers());   // one if number occurs twice
                 singles ^= cell.getAnswers();   // one if possibility is unique
@@ -74,7 +73,7 @@ public class Solver {
         singles = singles & ~nullify;   // remove duplicates from
 
         boolean filled = false;     // true if single found and filled
-        for (Cell[] cells: section.getSection()) {
+        for (Cell[] cells: section.getCells()) {
             for(Cell cell: cells) {
                 if ((cell.getAnswers() & singles) > 0) {    // if single, update cell
                     cell.setAnswers(cell.getAnswers() & singles);
@@ -86,30 +85,80 @@ public class Solver {
         return filled;
     }
 
+    public boolean scanRow(Row row) {
+        int singles = 0;    // binary number for single occurances
+        int nullify = 0;    // binary number for duplicates, one if duplicate, zero if not
+        for (Cell cell: row.getCells()) {
+            nullify |= (singles & cell.getAnswers());   // one if number occurs twice
+            singles ^= cell.getAnswers();   // one if possibility is unique
+        }
+        singles = singles & ~nullify;   // remove duplicates from
+
+        boolean filled = false;     // true if single found and filled
+        for(Cell cell: row.getCells()) {
+            if ((cell.getAnswers() & singles) > 0) {    // if single, update cell
+                cell.setAnswers(cell.getAnswers() & singles);
+                filled |= cell.update();
+            }
+        }
+
+        return filled;
+    }
+
+    public boolean scanColumn(Column column) {
+        int singles = 0;    // binary number for single occurances
+        int nullify = 0;    // binary number for duplicates, one if duplicate, zero if not
+        for (Cell cell: column.getCells()) {
+            nullify |= (singles & cell.getAnswers());   // one if number occurs twice
+            singles ^= cell.getAnswers();   // one if possibility is unique
+        }
+        singles = singles & ~nullify;   // remove duplicates from
+
+        boolean filled = false;     // true if single found and filled
+        for(Cell cell: column.getCells()) {
+            if ((cell.getAnswers() & singles) > 0) {    // if single, update cell
+                cell.setAnswers(cell.getAnswers() & singles);
+                filled |= cell.update();
+            }
+        }
+
+        return filled;
+    }
+
     /**
      * Process that solves a sudoku from start to finish
      * 
-     * @return  solved sudoku
+     * @return  the solved sudoku
      */
     public Sudoku solve() {
         while (!sudoku.isSolved()) {
             boolean restart = false;    // true if any method was successful, will restart loop
 
-            // check each cell for single candidates
-            for (Cell[] cells: sudoku.getGrid()) {
-                for (Cell cell: cells) {
-                    restart |= singleCandidate(cell);
+            if (!restart) {     // check each cell for single candidates
+                for (Cell[] cells: sudoku.getGrid()) {
+                    for (Cell cell: cells) {
+                        restart |= singleCandidate(cell);
+                    }
                 }
             }
 
-            if (restart) {  // restart if successful
-                continue;
+            if (!restart) {    // scan each section for correct answers
+                for (Section[] sections: sudoku.getSections()) {
+                    for (Section section: sections) {
+                        restart |= scanSection(section);
+                    }
+                }
             }
 
-            // scan each section for correct answers
-            for (Section[] sections: sudoku.getSections()) {
-                for (Section section: sections) {
-                    restart |= scan(section);
+            if (!restart) { 
+                for (Row row: sudoku.getRows()) {
+                    restart |= scanRow(row);
+                }
+            }
+
+            if (!restart) { 
+                for (Column column: sudoku.getColumns()) {
+                    restart |= scanColumn(column);
                 }
             }
         }

@@ -1,5 +1,5 @@
 public class Section {
-    private Cell[][] section;
+    private Cell[][] cells;
 
     /**
      * Represents section of sudoku 
@@ -7,24 +7,24 @@ public class Section {
      * @param cells cells in section
      */
     public Section(Cell[][] cells) {
-        section = new Cell[cells.length][cells[0].length];
+        this.cells = new Cell[cells.length][cells[0].length];
         for (int i = 0; i < cells.length; i++) {
             for (int j = 0; j < cells[0].length; j++) {
-                section[i][j] = cells[i][j];
+                this.cells[i][j] = cells[i][j];
             }
         }
     }
 
-    public Cell[][] getSection() {
-        return section;
+    public Cell[][] getCells() {
+        return cells;
     }
     
     public int[] getNums() {
-        int[] temp = new int[section.length * section[0].length];   // amount of elements in multidim. array
+        int[] temp = new int[cells.length * cells[0].length];   // amount of elements in multidim. array
         int count = 0;
-        for (int i = 0; i < section.length; i++) {
-            for (int j = 0; j < section.length; j++) {
-                temp[count++] = section[i][j].getNum();     // fills one-dim. array with values of two-dim. array
+        for (int i = 0; i < cells.length; i++) {
+            for (int j = 0; j < cells.length; j++) {
+                temp[count++] = cells[i][j].getNum();     // fills one-dim. array with values of two-dim. array
             }
         }
         return temp;    // integer representation of each cell
